@@ -4,6 +4,22 @@ sort: 1
 
 # New TXID Propose
 
+
+
+
+## Reference
+
+[1] https://scryptdoc.readthedocs.io/en/latest/contracts.html#contract-op-push-tx
+
+[2] https://github.com/sCrypt-Inc/boilerplate/blob/dev/contracts/spvToken.scrypt
+
+[3] https://xiaohuiliu.medium.com/peer-to-peer-tokens-6508986d9593
+
+[4] https://blog.csdn.net/weixin_47461167/article/details/108409290
+
+
+
+
 Text can be **bold**, _italic_, or ~~strikethrough~~. [Links](https://github.com) should be blue with no underlines (unless hovered over).
 
 There should be whitespace between paragraphs. There should be whitespace between paragraphs. There should be whitespace between paragraphs. There should be whitespace between paragraphs.
