@@ -4,10 +4,30 @@ sort: 1
 
 # New TXID Propose
 
+## 中文题目：使比特币具备持续遗传进化能力的一个改进呼吁
+
+### 起因
+
+### 为何它很必要？
+
+### 当前技术下，链上数据为何无法持续进化？
+
+### 如何实现持续的遗传进化？
+
+### 此改进优雅与简单吗？
+
+update TX Version
+
+### 一个牛刀小试：实现可实用的一层Token
 
 
+### Set In Stone：配合图灵完备实现一劳永逸
 
-## Reference
+
+呼吁
+
+
+### 参考文档
 
 [1] https://scryptdoc.readthedocs.io/en/latest/contracts.html#contract-op-push-tx
 
