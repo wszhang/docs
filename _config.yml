@@ -9,7 +9,7 @@ theme: null
 #   shortcodes: true
 
 readme_index:
-  with_frontmatter: false
+  with_frontmatter: true
 
 plugins:
   - jemoji
