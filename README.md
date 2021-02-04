@@ -9,8 +9,10 @@
 [CITE](https://github.com/rundocs/jekyll-rtd-theme)
 
 
-Copyright (c) 2021 WSZhang & contributors
 
+## Copyright
+
+Copyright (c) 2021 WSZhang & contributors
 
 Shield: [![CC BY 4.0][cc-by-shield]][cc-by]
 
