@@ -7,4 +7,7 @@ sort: 1
 ```
 {% raw %}{% include list.liquid all=false %}{% endraw %}
 ```
+
+{% include list.liquid all=false %}
+
 source: `{{ page.path }}`
