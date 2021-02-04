@@ -12,7 +12,7 @@
 
 ## Copyright
 
-Copyright (c) 2021 WSZhang & contributors
+Copyright (c) 2021 WSZhang
 
 Shield: [![CC BY 4.0][cc-by-shield]][cc-by]
 
