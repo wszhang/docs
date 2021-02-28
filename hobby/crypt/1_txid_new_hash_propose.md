@@ -2,15 +2,143 @@
 sort: 1
 ---
 
-# New TXID Propose
+# 使比特币交易具备持续遗传进化能力的一个改进呼吁
 
-## 中文题目：使比特币具备持续遗传进化能力的一个改进呼吁
+本文讲述由一个Token方案引发的比特币改进建议。特别提醒，其不仅对Token具有重要意义，而是对整个比特币网络中的交易（TX）的遗传进化能力有关键的影响，所以，题目中讲其“**使比特币交易具备遗传进化能力**”。
 
-### 起因
+实际上，我很想讲：本文呼吁的改进是实现比特币系统图灵完备能力的必要一环，但比特币的脚本能力确实已经完备了，其完备涵义的前提是：我们具有一个无限长的纸带（磁盘与带宽资源），这是需要被肯定的，我确实不能改变图灵完备的学界通用定义。但是，我仍然不死心的想更准确的补充一下：**该呼吁可使得比特币的图灵完备能力可以在有限的纸带上具备实用能力**。
 
-### 为何它很必要？
+我相信，本提议亟需在比特币网络中实现，且一旦得到实施，则Bitcoin系统因具有实用化的图灵完备能力可以在未来自行的进化发展，也将不再需要更多的功能改进，本改进是足够优雅、简洁、一劳永逸的。当然，类似椭圆曲线加密算法不再安全以后的安全改进另当别论。
+
+可以毫不夸张的说，比特币网络中，所有需要成长变化的数据都将受惠于此改进。所以，即便读者忽略前面的赘述，也希望能特别关注文章结尾附近的这部分逻辑延伸。
+
+## 本文起因
+
+一个协议的发起，其起因通常涉嫌各种利益关联，我希望完整的讲述出来，表明本文中改进提议的单纯动机。
+
+自2020年9月初，[**sCrypt**](https://scrypt.io/)公司的晓辉同学提出了一个[**点对点的一层Token解决方案**](https://xiaohuiliu.medium.com/peer-to-peer-tokens-6508986d9593)，
+其实现了仅依赖矿工即可以保证Token交易的安全性，其具备的如下几个关键的应用优点：
+
+ 1. 因为不需要第三方的Oracle参与，**使其仅需要最小的信任依赖**。
+ 2. 因为不需要第三方的Oracle参与，**使发行Token变得非常简单**，任何人都可以接近0成本的构建一个简单的交易来创建Token。
+ 3. **兼容SPV**（简易支付验证），使用Merkle Path简易的验证交易，**是Token可大规模扩容的关键**
+
+以上三者是同等重要的，为快速的推广，缺一不可。特别需要提到第2条，很多人容易忽略它，ETH之所以成功，重要之处在于其Token发行简单，这是一层Token的核心竞争力，这使得我认为此类一层Token是必不可少的，其重要性比Token的信任链的安全性有过之而无不及。
+
+但是，开发者们热烈讨论后，发现此**一层Token方案的交易膨胀难题**，其每一次的Token转移都要携带自Token发行交易始的所有交易的全部数据，随着Token在用户间的持续转移，最终不可避免其体积大小变得不可接受，这是实用中不可接受的缺点。
+
+在参与讨论的过程中，[我提出了一种二次Hash的办法](1_txid_new_hash_propose/p2pToken_chat_history.jpeg)来解决这个问题，其需要配合TX版本升级来实现，提议受到邱同学的理解支持。但当多数人对一层Token再次产生实用性怀疑的时候，我的改进提议并没有得到更多的响应与细细思辨。
+
+部分人希望我写出文字，详细的讲述解决方案，但源于以下因素，一直没有提笔：
+
+- 本技术改进提议很简单，应不需要写文章，只要关心的开发者认真考虑下即可理解。
+- 开发者们对可立刻着手构建的二层Token（有讲带Oracle的一层Token）比较感兴趣，并不热情的关心共识版本的变更。
+- 只要给些时间，其他人会发现二层Token的问题，就会自然的重发现（发明）本文提议的方法，并非必须由我来推动。
+- 一层Token的方案与开发是利他的，自身推动其实现需要消耗精力，其他人使用起来是平等简单的。
+- **我的参与完全出于业余爱好，与本职无关，且没有任何参与区块链产业的近远期计划，在家庭与工作繁忙的情况下动力不足。**
+- 我对Token生态并不是特别的关心，其是很重要的热点，但与我着重思考的一种应用生态方案关联不多。
+
+但是半年过去了，我越发坐不住了，原因多方面如下：
+
+- 近半年一层Token的极少进展与此瓶颈对生态的限制，影响了我对比特币改变民众生活的远景兴趣，难以忍受现状。
+- 蒋杰团队针对一层Token的改进提议应该没有本提议简洁与优雅（欢迎质疑）
+- Token热点是事实，在其他区块链出现对交易性能出现系统性无能时，比特币系统亟需抓住机会，展示自身能力，时机越发紧张。当大多数圈内参与者被迫接受ETH二层Token后，即便一层Token更便利性，也难以再次迁移。
+- 本计划在假期写出来，奈何拖到假期末，但是，拖延不能变成食言。
+- 我觉得我可以尽可能写的简单易懂一些，使不做开发的人也能理解这个改进的**简单并重要**之处。
+
+所以想写出来，尽可能的呼吁此改进，希望它得到实施。
+
+
+
+## 当前一层Token方案简介
+
+我们开始一点点拨开技术的迷雾，理解比特币的一层Token智能合约并不困难。
+
+在讲一层Token之前，我们需要先首先讲一下比特币的智能合约的核心概念 OP_PUSH_TX。
+
+而在此之前，我们还需要讲一点点比特币的脚本运行原理。
+
+我们倒叙展开，相信我，这些都很简单，且并不需要更多了。
+
+### 比特币脚本程序的运行计算方式
+
+比特币脚本，通常是很简单很短的一些代码，且不像高级程序语言那般具有很复杂的跳转结构，而是顺序的执行，如同一个数学算式一般，在数量不多的情况下，并不复杂，反而比一般的计算机程序简单易读。
+
+比如，数学算式： `1 + 1` ，在比特币脚本中，其表达顺序变为 `1 1 +` ，我们可以将 `+` 理解为一种最简单的函数，其在比特币脚本术语中称为操作符（OP_CODE）。因为操作符有很多，为方便识别，`+` 在比特币脚本中以 `OP_ADD` 表示。所以，最后的脚本表达式为` 1 1 OP_ADD`。比特币中的操作符（函数）总是对其左侧预定数量的输入数据进行加工处理，然后返回预定数量的数据值。此外，只还需要知道：比特币脚本的运算结合律为从左到右执行操作符（如果将其上下排列，此时则为自下而上顺序执行），最后得到的**数据序列**即为执行结果。本段示例表达式的执行结果自然为单个数字：`2` 。
+
+再例如：
+
+` 1 1 OP_ADD 3 OP_MUL`
+
+其中 `OP_MUL` 为数学中的算术乘操作（其对左边近邻的2个数值做乘法，然后返回一个数值）。
+其首先执行 `OP_ADD`，得到中间结果：
+
+` 2 3 OP_MUL `
+
+然后执行 ` OP_MUL `，得到最后的执行结果为 ` 6 `。
+
+
+最后一个简单的代表例子，其执行结果为数据序列：
+
+` 1 2 OP_DUP`
+
+OP_DUP的含义是复制左侧的单个数据，也就是复制 `2`，其他则保持不变，所以其执行结果为 ` 1 2 2 `，是3个数值组成的一个序列。还有挺多情况下，比特币脚本中的数据不是一个数值（如1、2、3等），而是具有某字节长度的字符串（16进制表达），但其仍然视为一个输入数据，在脚本表达式中，每个输入数据间用空格隔开。
+
+至此，只要我们在遇到未知OP_CODE时，[查找一下其定义](https://en.bitcoin.it/wiki/Script)，便基本能看懂比特币的脚本了。
+
+接着，我们可以讲解比特币智能合约中最重要的一个概念 "OP_PUSH_TX技术"。
+
+
+### OP_PUSH_TX 技术
+
+说其重要是因为，一旦有了 OP_PUSH_TX 技术，我们就可以在构造未花费比特币交易（UTXO）的时候，指定其花费条件，以便对后续的一系列子孙交易施加影响（提条件）。
+
+其并不复杂，为此我们只需要理解比特币中最简单也最常见的一段代码，其是常见的P2PK交易(pay-to-pubkey transaction)中的核心代码：
+
+` <Signature签名> <PublicKey公钥> OP_CHECKSIG ` **代码(1)**
+
+其中` < ... > ` 表达一个字符串输入数据，其意义由 `< >` 中的文字所表达。
+
+本代码中，操作符 OP_CHECKSIG 表达一系列计算操作组合成的单一函数，其首先对当前的TX的输入与输入等数据做HASH计算，得到 <**TxHashValue**> ：
+
+` <TxHashValue> = Hash( <TxInputs>, <TxOutputs>, ... ) ` 。**代码(2)**
+
+然后读入左侧的两个输入数据 <**Signature签名**> <**PublicKey公钥**> ，检查 <**Signature签名**> 是否是由 <**PublicKey公钥**> 对应的私钥： <**PrivateKey私钥**> 对 <**TxHashValue**> 进行签名得到的，返回真假数值。相关的签名检查算法我们不需要知道，我们只要知道：技术上这可以做到。
+
+我们将以上代码(1)分成两段： ` <Signature签名> ` 与 ` <PublicKey公钥> OP_CHECKSIG `，前者只有数据。
+我们的比特币交易就是通过将后一段代码放入交易的Outputs中（即为一个UTXO，也就是一个未开过的锁），然后为其分配余额，即完成将比特币发送到 持有<PublicKey公钥> 对应的私钥：<PrivateKey私钥> 的人的手掌中。当接受人花费此余额时，即利用手里的 <PrivateKey私钥> 对 <TxHashValue> 进行签名得到 <Signature签名> ，然后利用此签名作为钥匙，与后段代码（锁）组合起来，通过 **OP_CHECKSIG** 操作符的认证检查（完成解锁操作）。
+
+至此，**OP_PUSH_TX 技术的关键点来了：**
+
+前述利用 <PrivateKey私钥> 对 <TxHashValue> 进行签名获得 <Signature签名> 的过程，一般由用户在花费比特币余额时在比特币脚本外执行（为保持 <PrivateKey私钥> 的私密性）。但是，其签名操作完全可以利用图灵完备的比特币操作符在脚本内完成，此时我们可以选择一个可暴露的另一个 <PrivateKey私钥2> 来做签名，其签名过程可完全爆露在公共的空间中，然后执行以下代码：
+
+` <TxHashValue2> <PrivateKey私钥2> OP_Signature <PublicKey公钥2> OP_CHECKSIG ` **代码(3)**
+
+其中用 **OP_Signature** 并不是一个比特币脚本中自带的操作符，而是被用于表示使用一系列已有的 OP_CODE 组合而成的一段脚本代码的整体，其计算操作集合为一个单一函数，读入左侧的两个数据，进行椭圆曲线签名运算，计算结果为 ` <Signature签名2> `，即中间结果为：
+
+` <Signature签名2> <PublicKey公钥2> OP_CHECKSIG `
+
+这时的脚本跟前面解析过的就相同了，其中最关键的是 **OP_CHECKSIG** 操作符会自己读入 <**TxInputs**>、 <**TxOutputs**> 等**当前Tx**的数据，然后构造 <**TxHashValue**> 如果验证通过则说明 <**TxHashValue2**> 与 <**TxHashValue**> 是同一个值。
+
+
+至此，我们**得到了一个方法可以验证脚本中人工输入的 <TxHashValue\> 的真假（是否是由当前Tx的数据经Hash计算得到）**。
+
+有了这个方法，我们就可以通过代码(3)中除第一个数据 <**TxHashValue2**> 后面的其他代码放入UTXO中，使得要求花费该UTXO时，必须还要输入当前TX（花费时）真实的 <**TxHashValue**> ，才能验证通过。
+
+一旦我们可以要求花费时在脚本中输入当前Tx真实的 <**TxHashValue**>，就可以通过结合其他操作符（如比特币脚本HASH运算符：OP_HASH256 ）来要求输入真实的当前Tx中的部分数据自身（例如TxOutputs），然后就可以构造对输出数据的其他限制条件。也就是说，我们可以构造一个UTXO，实现对花费此UTXO的新的TX的新UTXO做出限制。
+
+至此，我们解释了 OP_PUSH_TX 技术背后的原理，我们得到了一个非常重要的知识，比特币脚本可是实现对未来还未出现的后续交易Tx做出限制，其可做出限制的数据范围即为代码(2)中为获得 <**TxHashValue**> 所执行Hash函数时输入的当前Tx数据，此Tx数据被称为交易原像（Preimage），其不是完整的Tx数据（因为不可以循环自签名，所以也无法做到完整性），但是却是当前Tx中最值得使用签名去保护的有关键意义的数据。
+
+
+
+### 一层Token（spvToken）原理
 
 ### 当前技术下，链上数据为何无法持续进化？
+
+
+
+
+##  比特币改进提议
 
 ### 如何实现持续的遗传进化？
 
@@ -21,8 +149,11 @@ update TX Version
 ### 一个牛刀小试：实现可实用的一层Token
 
 
-### Set In Stone：配合图灵完备实现一劳永逸
 
+
+## Set In Stone：配合图灵完备实现一劳永逸
+
+利用时间（历史与未来）来延伸比特币图灵完备系统的操作空间，持续凝聚/进化/裁剪出实用(有用)的数据空间，形成一个无限长的纸带。
 
 呼吁
 
@@ -33,182 +164,9 @@ update TX Version
 
 [2] https://github.com/sCrypt-Inc/boilerplate/blob/dev/contracts/spvToken.scrypt
 
-[3] https://xiaohuiliu.medium.com/peer-to-peer-tokens-6508986d9593
+[3] 
 
 [4] https://blog.csdn.net/weixin_47461167/article/details/108409290
 
 
 
-
-Text can be **bold**, _italic_, or ~~strikethrough~~. [Links](https://github.com) should be blue with no underlines (unless hovered over).
-
-There should be whitespace between paragraphs. There should be whitespace between paragraphs. There should be whitespace between paragraphs. There should be whitespace between paragraphs.
-
-There should be whitespace between paragraphs. There should be whitespace between paragraphs. There should be whitespace between paragraphs. There should be whitespace between paragraphs.
-
-> There should be no margin above this first sentence.
->
-> Blockquotes should be a lighter gray with a gray border along the left side.
->
-> There should be no margin below this final sentence.
-
-# Header 1
-
-This is a normal paragraph following a header. Bacon ipsum dolor sit amet t-bone doner shank drumstick, pork belly porchetta chuck sausage brisket ham hock rump pig. Chuck kielbasa leberkas, pork bresaola ham hock filet mignon cow shoulder short ribs biltong.
-
-## Header 2
-
-> This is a blockquote following a header. Bacon ipsum dolor sit amet t-bone doner shank drumstick, pork belly porchetta chuck sausage brisket ham hock rump pig. Chuck kielbasa leberkas, pork bresaola ham hock filet mignon cow shoulder short ribs biltong.
-
-### Header 3
-
-```
-This is a code block following a header.
-```
-
-#### Header 4
-
-- This is an unordered list following a header.
-- This is an unordered list following a header.
-- This is an unordered list following a header.
-
-##### Header 5
-
-1. This is an ordered list following a header.
-2. This is an ordered list following a header.
-3. This is an ordered list following a header.
-
-###### Header 6
-
-| What    | Follows  |
-| ------- | -------- |
-| A table | A header |
-| A table | A header |
-| A table | A header |
-
----
-
-There's a horizontal rule above and below this.
-
----
-
-Here is an unordered list:
-
-- Salt-n-Pepa
-- Bel Biv DeVoe
-- Kid 'N Play
-
-And an ordered list:
-
-1. Michael Jackson
-2. Michael Bolton
-3. Michael Bublé
-
-And an unordered task list:
-
-- [x] Create a sample markdown document
-- [x] Add task lists to it
-- [ ] Take a vacation
-
-And a "mixed" task list:
-
-- [ ] Steal underpants
-- ?
-- [ ] Profit!
-
-And a nested list:
-
-- Jackson 5
-  - Michael
-  - Tito
-  - Jackie
-  - Marlon
-  - Jermaine
-- TMNT
-  - Leonardo
-  - Michelangelo
-  - Donatello
-  - Raphael
-
-Definition lists can be used with HTML syntax. Definition terms are bold and italic.
-
-<dl>
-    <dt>Name</dt>
-    <dd>Godzilla</dd>
-    <dt>Born</dt>
-    <dd>1952</dd>
-    <dt>Birthplace</dt>
-    <dd>Japan</dd>
-    <dt>Color</dt>
-    <dd>Green</dd>
-</dl>
-
----
-
-Tables should have bold headings and alternating shaded rows.
-
-| Artist          | Album          | Year |
-| --------------- | -------------- | ---- |
-| Michael Jackson | Thriller       | 1982 |
-| Prince          | Purple Rain    | 1984 |
-| Beastie Boys    | License to Ill | 1986 |
-
-If a table is too wide, it should condense down and/or scroll horizontally.
-
-<!-- prettier-ignore-start -->
-
-| Artist            | Album           | Year | Label       | Awards   | Songs     |
-|-------------------|-----------------|------|-------------|----------|-----------|
-| Michael Jackson   | Thriller        | 1982 | Epic Records | Grammy Award for Album of the Year, American Music Award for Favorite Pop/Rock Album, American Music Award for Favorite Soul/R&B Album, Brit Award for Best Selling Album, Grammy Award for Best Engineered Album, Non-Classical | Wanna Be Startin' Somethin', Baby Be Mine, The Girl Is Mine, Thriller, Beat It, Billie Jean, Human Nature, P.Y.T. (Pretty Young Thing), The Lady in My Life |
-| Prince            | Purple Rain     | 1984 | Warner Brothers Records | Grammy Award for Best Score Soundtrack for Visual Media, American Music Award for Favorite Pop/Rock Album, American Music Award for Favorite Soul/R&B Album, Brit Award for Best Soundtrack/Cast Recording, Grammy Award for Best Rock Performance by a Duo or Group with Vocal | Let's Go Crazy, Take Me With U, The Beautiful Ones, Computer Blue, Darling Nikki, When Doves Cry, I Would Die 4 U, Baby I'm a Star, Purple Rain |
-| Beastie Boys      | License to Ill  | 1986 | Mercury Records | noawardsbutthistablecelliswide | Rhymin & Stealin, The New Style, She's Crafty, Posse in Effect, Slow Ride, Girls, (You Gotta) Fight for Your Right, No Sleep Till Brooklyn, Paul Revere, Hold It Now, Hit It, Brass Monkey, Slow and Low, Time to Get Ill |
-
-<!-- prettier-ignore-end -->
-
----
-
-Code snippets like `var foo = "bar";` can be shown inline.
-
-Also, `this should vertically align` ~~`with this`~~ ~~and this~~.
-
-Code can also be shown in a block element.
-
-```
-var foo = "bar";
-```
-
-Code can also use syntax highlighting.
-
-```javascript
-var foo = "bar";
-```
-
-```
-Long, single-line code blocks should not wrap. They should horizontally scroll if they are too long. This line should be long enough to demonstrate this.
-```
-
-```javascript
-var foo =
-  "The same thing is true for code with syntax highlighting. A single line of code should horizontally scroll if it is really long.";
-```
-
-Inline code inside table cells should still be distinguishable.
-
-| Language   | Code               |
-| ---------- | ------------------ |
-| Javascript | `var foo = "bar";` |
-| Ruby       | `foo = "bar"`      |
-
----
-
-Small images should be shown at their actual size.
-
-![Octocat](https://github.githubassets.com/images/icons/emoji/octocat.png)
-
-Large images should always scale down and fit in the content container.
-
-![Branching](https://guides.github.com/activities/hello-world/branching.png)
-
-```
-This is the final element on the page and there should be no margin below this.
-```
