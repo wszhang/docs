@@ -1,9 +1,5 @@
 source "https://rubygems.org" # source "https://gems.ruby-china.com"
 
-gemspec
-
-gem "github-pages", group: :jekyll_plugins
-
 gem "jekyll-rtd-theme"
 
 group :jekyll_plugins do
@@ -14,4 +10,6 @@ group :jekyll_plugins do
   gem "jemoji"
   gem "jekyll-avatar"
   gem "jekyll-mentions"
+  gem "liquid"
+  gem "jekyll-edit-link"
 end
