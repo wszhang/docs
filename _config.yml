@@ -18,6 +18,7 @@ plugins:
   - jekyll-readme-index
   - jekyll-titles-from-headings
   - jekyll-default-layout
+  - jekyll-edit-link
 
 exclude:
   - Makefile
