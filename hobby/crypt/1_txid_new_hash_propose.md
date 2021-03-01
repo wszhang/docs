@@ -10,7 +10,7 @@ sort: 1
 
 我相信，本提议亟需在比特币网络中实现，且一旦得到实施，则Bitcoin系统因具有实用化的图灵完备能力可以在未来自行的进化发展，**将不再需要更多的功能改进，本改进是足够优雅、简洁、一劳永逸的**。当然，类似椭圆曲线加密算法不再安全以后的安全改进另当别论。
 
- **读者可选择性跳过前面的章节（起因赘述与技术基础），但请特别关注文章结尾附近的遗传进化逻辑延伸。** 
+ 本文希望非开发人员依然能够理解全部流程，所以简洁的描述了所有必要的基础知识，**读者可选择性跳过前面的章节（起因赘述、技术基础），但请特别关注文章结尾附近的遗传进化逻辑延伸。** 
 
 ## 本文起因
 
@@ -35,7 +35,7 @@ sort: 1
 - 开发者们对可立刻着手构建的二层Token（有讲带Oracle的一层Token）比较感兴趣，并不热情的关心共识版本的变更。
 - 只要给些时间，其他人会发现二层Token的问题，就会自然的重发现（发明）本文提议的方法，并非必须由我来推动。
 - 一层Token的方案与开发是利他的，自身推动其实现需要消耗精力，其他人使用起来是平等简单的。
-- ** 我的参与完全出于业余爱好，与本职无关，且没有任何参与区块链产业的近远期计划，在家庭与工作繁忙的情况下动力不足。 ** 
+- **我的参与完全出于业余爱好，与本职无关，且没有任何参与区块链产业的近远期计划，在家庭与工作繁忙的情况下动力不足。** 
 - 我对Token生态并不是特别的关心，其是很重要的热点，但与我着重思考的一种应用生态方案关联不多。
 
 但是半年过去了，我越发坐不住了，原因多方面如下：
@@ -64,31 +64,21 @@ sort: 1
 
 比特币脚本，通常是很简单很短的一些代码，且不像高级程序语言那般具有很复杂的跳转结构，而是顺序的执行，如同一个数学算式一般，在数量不多的情况下，并不复杂，反而比一般的计算机程序简单易读。
 
-比如，数学算式： ` 1 + 1 ` ，在比特币脚本中，其表达顺序变为 ` 1 1 + ` ，我们可以将 ` + ` 理解为一种最简单的函数，其在比特币脚本术语中称为操作符（OP_CODE）。因为操作符有很多，为方便识别，` + ` 在比特币脚本中以 ` OP_ADD ` 表示。所以，最后的脚本表达式为` 1 1 OP_ADD`。比特币中的操作符（函数）总是对其左侧预定数量的输入数据进行加工处理，然后返回预定数量的数据值。此外，只还需要知道：比特币脚本的运算结合律为从左到右执行操作符（如果将其上下排列，此时则为自下而上顺序执行），最后得到的**数据序列**即为执行结果。本段示例表达式的执行结果自然为单个数字：` 2 ` 。
+以最简单的数学算式： `1 + 1` 为例，其在比特币脚本中，表达顺序变为 `1 1 +` ，我们可以将 `+` 理解为一种最简单的函数，其在比特币脚本术语中称为操作符（OP_CODE）。因为操作符有很多，为方便识别，`+` 在比特币脚本中以 `OP_ADD` 表示。所以，最后的脚本表达式为`1 1 OP_ADD`。比特币中的操作符（函数）总是对其左侧预定数量的输入数据进行加工处理，然后返回预定数量的数据值。此外，只还需要知道：比特币脚本的运算结合律为从左到右执行操作符（如果将其上下排列，此时则为自下而上顺序执行），最后得到的**数据序列**即为执行结果。本段示例表达式的执行结果自然为单个数字：`2` 。
 
----
-再例如：
-
-` 1 1 OP_ADD 3 OP_MUL`
-
+- **又例如** 
+`1 1 OP_ADD 3 OP_MUL` ，
 其中 `OP_MUL` 为数学中的算术乘操作（其对左边近邻的2个数值做乘法，然后返回一个数值）。
 其首先执行 `OP_ADD`，得到中间结果：
-
-` 2 3 OP_MUL `
-
+`2 3 OP_MUL`
 然后执行 `OP_MUL` ，得到最后的执行结果为 `6` 。
 
----
-最后一个简单的代表例子，其执行结果为数据序列：
-
+- **再举一个执行结果为数据序列的代表例子** ：
 `1 2 OP_DUP`
+OP_DUP的含义是复制左侧的单个数据，也就是复制 `2`，得到双份数据，所以其执行结果为 `1 2 2`，是3个数值组成的一个序列。
 
-OP_DUP的含义是复制左侧的单个数据，也就是复制 `2`，得到双份数据，所以其执行结果为 ` 1 2 2 `，是3个数值组成的一个序列。
+- **另有许多情况下，比特币脚本中的数据不是一个数值** （如1、2、3等），而是具有某字节长度的字符串（16进制表达），但仍然被视为一个输入数据（也可将其理解为一个很大的正整数），在脚本表达式中，每个输入数据间会用空格隔开。
 
----
-还有挺多情况下，比特币脚本中的数据不是一个数值（如1、2、3等），而是具有某字节长度的字符串（16进制表达），但仍然被视为一个输入数据（也可将其理解为一个很大的正整数），在脚本表达式中，每个输入数据间会用空格隔开。
-
----
 至此，只要我们在遇到未知OP_CODE时，[查找一下其定义](https://en.bitcoin.it/wiki/Script)，便基本能看懂比特币的脚本了。
 
 接着，我们可以开始理解比特币智能合约中最重要的一个概念："OP_PUSH_TX技术"。
@@ -118,7 +108,7 @@ OP_PUSH_TX原理并不复杂，为此我们只需要理解比特币中最简单�
 <TxHashValue> = Hash( <TxData> ) 
 ```
 
-然后读入左侧的两个输入数据 <**Signature签名**> <**PublicKey公钥**> ，检查 <**Signature签名**> 是否是由 <**PublicKey公钥**> 对应的私钥： <**PrivateKey私钥**> 对 <**TxHashValue**> 进行签名得到的，返回真假判断。我们不需要知道相关的签名检查算法，只要知道技术上这可以做到即可。
+然后读入左侧的两个输入数据 <**Signature签名**> <**PublicKey公钥**> ，检查 <**Signature签名**> 是否是由 <**PublicKey公钥**> 对应的私钥： <**PrivateKey私钥**> 对 <**TxHashValue**> 进行签名得到的，返回真假判断。 **OP_CHECKSIG 是比特币系统中极为重要的一个操作符** 。
 
 我们可以顺便理解一下比特币支付背后的交易生成、提交与验证原理。首先，将以上 [代码块(1)](#code1) 分成两段： `<Signature签名>` 与 `<PublicKey公钥> OP_CHECKSIG`，前一段只有数据没有操作符。然后，将后一段代码放入交易的Outputs中（即为一个UTXO，等同于生成一个未开过的**锁**），并为其分配比特币余额，即完成将比特币发送到 持有私钥 <**PrivateKey私钥**> （ 其与 <**PublicKey公钥**> 对应配对） 的人的手中。当接受人花费此余额时，即利用手里的 <**PrivateKey私钥**> 对 <**TxHashValue**> 进行签名得到 <**Signature签名**> ，然后利用此签名作为**钥匙**，与后段代码（**锁**）组合起来，提交给矿工网络去执行验证， 矿工们通过执行 **OP_CHECKSIG** 操作符完成认证检查，即完成解锁操作。解锁之后，交易发送者一般会同时构造另一把新锁，如此交易迭代下去。
 
@@ -155,16 +145,94 @@ OP_PUSH_TX原理并不复杂，为此我们只需要理解比特币中最简单�
 作为总结，**我们可以构造一个Tx1，在其中的UTXO1中写入OP_PUSH_TX相关代码，要求接收者在构造新的Tx2、花费此UTXO1时，输入正确的<Tx2Data\>，同时写入对其UTXO2部分数据的各种图灵完备的验证要求，对新生成的UTXO2做出限制。该限制条件仍可以被UTXO3继承，然后通过UTXO链式的持续遗传下去。**
 
 
-我们可以把 [代码块(3)](#code3) 中的 `<TxData(解锁时输入)> OP_HASH <PrivateKey私钥2> OP_Signature` 代码转换为形式 `<TxData(解锁时输入)> <PrivateKey私钥2> OP_PUSH_TX` 用封装的单一函数 OP_PUSH_TX 完成 OP_HASH 与 OP_Signature 的作用，这个 OP_PUSH_TX 自然也不是比特币脚本自带的操作符，其 OP_ 前缀仅表示其实现了一个封装的功能，在sCrypt公司的产品中可以以类似原生操作符的方式被调用，sCrypt 编译器会自动完成真实操作符代码的植入工作。
+* 我们可以把 [代码块(3)](#code3) 中的 ` <TxData(解锁时输入)> OP_HASH <PrivateKey私钥2> OP_Signature ` 代码转换为形式 `<TxData(解锁时输入)> <PrivateKey私钥2> OP_PUSH_TX` 用封装的单一函数 OP_PUSH_TX 完成 OP_HASH 与 OP_Signature 的作用，这个 OP_PUSH_TX 自然也不是比特币脚本自带的操作符，其 OP_ 前缀仅表示其实现了一个封装的功能，在sCrypt公司的产品中可以以类似原生操作符的方式被调用，sCrypt 编译器会自动完成真实操作符代码的植入工作。
 
 至此，我们解释了 OP_PUSH_TX 技术背后的原理，我们得到了一个非常重要的知识，比特币脚本可是实现对未来还未出现的后续交易Tx做出限制，其可做出限制的数据范围即为 [代码块(2)](#code2) 中为获得 <**TxHashValue**> 所执行Hash函数时输入的当前Tx数据 <**TxData**>，此Tx数据被称为交易原像（Preimage），其不是完整的Tx数据（因为不可以循环自签名，所以也无法做到完整性），但是却是当前Tx中最值得使用签名去保护的有关键意义的数据。
 
 
-#### Preimage：智能合约的可操作边界
+#### Preimage 与智能合约的可操作边界
+
+不想细看的读者可直接跳转至本[节末的总结](#PreimageSummary) .
+
+将比特币下基于UTXO的智能合约理解为：**求解一个钥匙（也可分割为多个）是否与设计好的锁匹配**，此过程可表达为验证此函数等式：
+
+<span id="math1">  </span>
+```math 
+公式(1)：
+Lock_In_TxPre( <Keys_In_TxNow> ) == True 
+``` 
+
+是否成立。其中，TxNow表示当前Tx，TxPre表示正在花费的 UTXO 所在的前一个Tx。本文并不希望使用专业术语，所以使用了如上这些更容易理解的命名方式，希望可在讲述原理时不增加一般读者的记忆困难。
+
+一个特别有意义的合约设计基础知识是：其中 `<Keys_In_TxNow>` 参数的可变空间范围，它决定了智能合约的能力边界，因为锁（Lock_In_TxPre）是可以被任意构造的（源于脚本的图灵完备性）。
+
+Preimage 是 OP_PUSH_TX 技术为 `<Keys_In_TxNow>` 带来的新的参数空间， 
+[其包含如下内容](https://github.com/bitcoin-sv/bitcoin-sv/blob/master/doc/abc/replay-protected-sighash.md#digest-algorithm)：
+
+1. nVersion of the transaction (4-byte little endian)
+1. hashPrevouts (32-byte hash)
+1. hashSequence (32-byte hash)
+1. outpoint (32-byte hash + 4-byte little endian)
+1. scriptCode of the input (serialized as scripts inside CTxOuts)
+1. value of the output spent by this input (8-byte little endian)
+1. nSequence of the input (4-byte little endian)
+1. hashOutputs (32-byte hash)
+1. nLocktime of the transaction (4-byte little endian)
+1. sighash type of the signature (4-byte little endian)
+
+[以上参数的涵义原文见于此链接](https://github.com/bitcoin-sv/bitcoin-sv/blob/master/doc/abc/replay-protected-sighash.md#digest-algorithm)，其中的表述不易理解，本文详细的解释如下：
+
+1. nVersion 为交易的版本号 ( **比特币为交易格式的升级预留了版本号位** )。
+
+1. hashPrevouts 一般为所有输入 UTXO 的位置指针的序列化数据的 双SHA256 Hash值。即为: SHA256^2( Serialize( **TxPre1_TXID** + **TxPre1_VOUT** + **TxPre2_TXID** + **TxPre2_VOUT** + ... ) )，其中 **TxPre1_TXID** 为花费的第一个UTXO所在的Tx的
+[TXID](https://learnmeabitcoin.com/technical/txid)，
+**TxPre1_VOUT** 是一个数值，指出要花费的第一个 UTXO 在其Tx的Outputs中的排序位置（序号）。TxPre1_TXID 与 TxPre1_VOUT 共同给出了 UTXO1 的全局指针（此处感谢aaron）。当 TxNow 花费的 UTXO 只有一个时，不存在 **TxPre2** 等。
+在少数交易中，其收到SIGHASH_ANYONECANPAY的非标准使用而有变化。
+
+1. hashSequence 为所有输入的 nSequence 的序列化数据的 双SHA256 Hash值: SHA256^2( Serialize( **TxNow_Input1_nSequence** + **TxNow_Input2_nSequence** + ... ) )。使用nSequence可实现交易在交易池中等待更新、延迟上链的功能。
+在少数交易中，其收到SIGHASH_ANYONECANPAY的非标准使用而有变化。
+
+1. outpoint指当前要进行 OP_CHECKSIG 验证的 UTXO 的位置指针的序列化数据， 即Serialize( **TxPreCurrentUnlock_TXID** + **TxPreCurrentUnlock_VOUT** ）。因每一个 UTXO 花费时都需要做 OP_CHECKSIG 验证，于是对应每一个OP_CHECKSIG操作，都会有一个依赖 **当前需解锁UTXO** 的不同的 Preimage 。与前述 hashPrevouts 是局部与整体的关系。
+
+1. scriptCode of the input 是当前要打开（执行）的脚本锁，即 Lock_In_TxPreCurrentUnlock。某些时候，其因OP_CODESEPARATOR的加入而有所变化。
+
+1. value of the output spent by this input， 当前要花费的 UTXO 的比特币余额。
+
+1. nSequence of the input， 此项表示当前 OP_CHECKSIG 验证的Input所对应的nSequence，可表示为TxNow_CurrentInput_nSequence，与前述 hashSequence 是局部与整体的关系。
+
+1. hashOutputs 一般为当前交易的所有输出的 余额+脚本锁的字节长度+脚本锁 的序列化数据的 双SHA256 Hash值，即 SHA256^2( Serialize( **TxNow_OUT1_Amount** + **TxNow_OUT1_LockScriptSize** + **TxNow_OUT1_LockScript** + **TxNow_OUT2_Amount** + **TxNow_OUT2_LockScriptSize** + **TxNow_OUT2_LockScript** +  ... ) ) 。
+某些时候，其会因sighash使用了非常用值而有所变化。
+
+1. nLocktime 设定了最小的 block height or Unix time，交易只有在此之后才能被上链。
+
+1. sighash type of the signature： 顾名思义，其表示签名的类型，会在 OP_CHECKSIG要求输入的签名数据中被给出。其值通常为ALL，表示对所有输入与所有输出签名。其他取值会导致前述的某些参数的涵义有所变化，本文中不考虑此种情况。
 
 
 
-### 一层Token（spvToken）原理
+
+
+作为总结，下图中给出了一个Tx中，哪些数据被以上的哪个参数所表示：
+
+![preimage_txdata](1_txid_new_hash_propose/preimage_txdata.png)
+
+可以看到，Preimage中包含了当前Tx中除 Input Count、ScriptSig Size、ScriptSig（signhash除外）、Output Count以外的所有数据。特别是，参考 [公式(1)](#math1) 中的 Lock_In_TxPre，当前Tx Output中的ScriptPubKey 即是构造的新的UTXO锁： Lock_In_TxNow，其将成为 Lock_In_TxPre 的输入参数 `<Keys_In_TxNow>` 的一部分。
+
+于是，[公式(1)](#math1) 可分解表达为
+
+<span id="math2">  </span>
+```math 
+公式(1)：
+Lock_In_TxPre( < Lock_In_TxNow, TxPre_TXID, TxPre_VOUT... > ) == True 
+``` 
+这样清晰的表达了前一个 UTXO 可以对花费它形成的新 UTXO 进行约束，一层 spvToken 方案需要这一能力。
+
+此外，对任何已知HASH值为 <**HashValue**> 的数据，可以通过在 **“脚本锁”** 中加入 `OP_HASH256 <HashValue> OP_EQUAL` 代码段来要求输入该数据，并对其进行数据变换操作/验证。特别是，使用该方式可以向合约中引入某个历史的TX数据，类比OP_PUSH_TX，可将此操作统称为PUSH_TX操作。一层 spvToken 方案也需要这一能力。
+
+至此，本文讲述了一层 spvToken 方案所需要的完整的 PUSH_TX 技术，其包括 PUSH **当前Tx 以及历史Tx**  到 spvToken 合约中。接下来我们可以开始理解 **一层spvToken原理**。
+
+
+
+### 一层 spvToken 原理
 
 
 
