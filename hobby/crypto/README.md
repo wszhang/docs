@@ -2,7 +2,7 @@
 sort: 1
 ---
 
-# Crypt
+# Crypto
 
 ```
 {% raw %}{% include list.liquid all=false %}{% endraw %}

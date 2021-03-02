@@ -1,6 +1,8 @@
 ---
 sort: 1
 ---
+
+<!--
 ---
 puppeteer:
     pdf:
@@ -16,6 +18,7 @@ puppeteer:
         quality: 90
         fullPage: true
 ---
+-->
 
 
 # 使比特币交易具备持续遗传进化能力的一个改进呼吁
