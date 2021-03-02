@@ -1,4 +1,5 @@
 ---
+sort: 1
 puppeteer:
     pdf:
         format: A4
@@ -12,9 +13,6 @@ puppeteer:
     image:
         quality: 90
         fullPage: true
----
----
-sort: 1
 ---
 
 
